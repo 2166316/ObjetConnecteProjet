@@ -2,9 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mysql = require("mysql2");
 
-<<<<<<< HEAD
-
-=======
+[11:21] Antoine Fortier
 var con = mysql.createPool({
     host: "tp2-database-cegeplimoilou-d98e.aivencloud.com",
     port: 13923,
@@ -13,8 +11,7 @@ var con = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-})
->>>>>>> c45523a (ajout api)
+});
 
 router.get("/allData",(req,res)=>{
 
