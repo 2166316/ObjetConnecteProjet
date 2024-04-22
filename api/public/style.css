@@ -1,40 +1,108 @@
 body {
-font-family: Arial, sans-serif;
-background-color: #f4f4f4;
-margin: 0;
-padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
-.login-container {
-    width: 300px;
-    margin: 100px auto;
+.container{
+    width: 80%;
+    margin: 50px auto;
     background-color: #fff;
-    padding: 100px;
+    padding: 30px;
     border-radius: 15px;
     box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
+    height: 300px;
+    border: #F2C744 3px solid;
+    box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.07);
+    display: flex;
 }
 
-h2 {
-    text-align: center;
-}
-
-input[type="text"],
-input[type="password"],
-button {
+.header{
     width: 100%;
-    margin-bottom: 20px;
-    padding: 10px;
-    border-radius: 0.25rem;
-    box-sizing: border-box;
+    background-color: #004F4F;
+    height: 50px;
+    padding: 20px;
+    padding-left: 35px;
+    
 }
 
-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
+.header h1 , .header span{
+    color: #EBE8E8;
+    margin: 0px;
+}
+
+
+.header h1{
+    width: 80%;
+    margin-left: 20px;
+}
+
+.header img{
+    height: 35px;
+    width: 35px;
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #0056b3;
+.header .menu-container{
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    padding: 5px;
 }
+
+legend{
+
+    color: #0476D9;
+    display: inline-block;
+    padding: 0 10px;
+    background-color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    
+}
+
+.mesure-container{
+    flex: 1;
+    /*width: 25%;*/
+    margin-right: 20px;
+    border: 1.5px solid #D0D6D6; 
+    box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.07);
+    border-radius: 6px; 
+    background-color: #FFFFFF;
+    padding: 20px;
+}
+
+.value-title{
+    color: #0476D9;
+}
+
+.value-container{
+    border: 1px solid black;
+    padding: 10px;
+    width: 50px;
+    text-align: center;
+    font-size: 30px;
+}
+
+
+/*.level-holder{
+    border-radius: 50px;
+    width: 80%;
+    background-color: gray;
+    height: 50px;
+    margin: auto;
+    padding: 10px;
+}
+
+.level{
+    border-radius: 50px;
+    height: 100%;
+    background-color: red;
+    margin: auto;
+    width: 100px;
+
+
+}*/
