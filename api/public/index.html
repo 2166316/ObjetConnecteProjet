@@ -7,19 +7,32 @@
     <link type="text/css" rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="login-container">
-        <h2>Connexion</h2>
-        <form action="/login" method="POST" >
-            <input type="text" name="username" placeholder="Nom d'utilisateur" required>
-            <input type="password" name="password" placeholder="Mot de passe" required>
-            <button type="submit">Se connecter</button>
-        </form>
-        <form action="/register" method="POST">
-            <button  type="submit">S'inscrire</button>
-        </form>
-        <p><!--test--></p>
-
-    </div>
-    <div style="width: 25%; margin: auto; padding: auto;"><h3 style="text-align: center; color: red;" ></h3></div>
+    <div class="header">
+        <h1>Home controller</h1>
+        <div class="menu-container">
+            <span style="margin-right: 10px;"> <!--date--> </span>
+            <img src="./menu-svgrepo-com.svg" alt="img"/>
+        </div>
+    <fieldset class="container">
+        <legend>Air quality</legend>
+        <div class="mesure-container">
+            <h3 class="value-title">Humidity</h3>
+            <div class="value-container"> <!--hum--> </div>
+            <!--<div class="level-holder"><div class="level"></div></div>-->
+        </div>
+        <div class="mesure-container">
+            <h3 class="value-title">CO2</h3>
+            <div class="value-container"> <!--co2--> </div>
+        </div>
+    </fieldset>
+    <fieldset class="container">
+        <legend>Air temperature</legend>
+        <div class="mesure-container" >
+            <h3 class="value-title">Temperature intérieur</h3>
+            <div class="value-container"> <!--temp--> </div>
+        </div>
+        <div class="mesure-container" style="opacity: 0;"></div>
+    </fieldset>
+    
 </body>
 </html>
