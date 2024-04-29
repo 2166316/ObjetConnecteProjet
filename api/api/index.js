@@ -4,14 +4,17 @@ var app = express();
 
 const dbRoutes = require("./database");
 const pagesRoutes = require("./pages");
+const arduinoRoutes = require("./arduinoEndPoint");
 
-//serve public folder
+//serve le dossier public
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Mount route files
+//les routes
 app.use("/", pagesRoutes);
 app.use("/db", dbRoutes);
+//app.use("/ar", arduinoRoutes);
 
+//le port 
 app.listen(3000, () => {
     console.log('Serveur en écoute sur le port 3000');
 });

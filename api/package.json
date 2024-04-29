@@ -9,7 +9,7 @@
     "nodemon": "^3.1.0"
   },
   "scripts": {
-    "start": "nodemon ./api/index.js",
+    "start": "node ./api/index.js",
     "dev": "nodemon ./api/index.js"
   },
   "devDependencies": {

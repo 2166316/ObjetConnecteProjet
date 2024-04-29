@@ -82,11 +82,17 @@ legend{
 .value-container{
     border: 1px solid black;
     padding: 10px;
-    width: 50px;
     text-align: center;
     font-size: 30px;
+    width: fit-content;
 }
 
+.refresh:hover{
+    /*border-bottom: 1px solid black;*/
+    background-color: #F2C744;
+    border-radius: 6px; 
+
+}
 
 /*.level-holder{
     border-radius: 50px;
