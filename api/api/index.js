@@ -2,7 +2,8 @@ const express = require("express");
 const path = require("path");
 var app = express();
 
-const dbRoutes = require("./database");
+//contient la fonction router et la fonction de database postAvgToDataBase()
+const {router,postAvgToDataBase } = require("./database");
 const pagesRoutes = require("./pages");
 const arduinoRoutes = require("./arduinoEndPoint");
 
@@ -11,7 +12,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 //les routes
 app.use("/", pagesRoutes);
-app.use("/db", dbRoutes);
+app.use("/db", router);
 //app.use("/ar", arduinoRoutes);
 
 //le port 
