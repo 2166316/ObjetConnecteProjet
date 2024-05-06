@@ -38,8 +38,10 @@ const int mq135PinOut = A1;
 
 
 //des valeurs constantes à voir //
+//nombre pour le voc max 
+const float vocLevelTrigger = 900; //ppb
 //nombre pour le co2 max 
-const float co2LevelTrigger = 60;
+const float co2LevelTrigger = 700; //ppm
 //nombre pour l'humidité max 
 const float humidityLevelTrigger = 80; 
 //nombre pour la température max 
@@ -67,7 +69,7 @@ void setup() {
 
 
 void loop() {
-  //aller chercher la température actuelle
+  //aller chercher la température et humidité actuelle
   float hLevel = getHumidity();
   float tLevel = getTemperature();
 
@@ -82,9 +84,11 @@ void loop() {
 
   //appel d'api
   httpApiCall(tLevel, hLevel, co2Level,vocLevel);
+  Serial.println("---------------");
 }
 
 /**///CODE pour Wifi connection et httpclient/**/
+//connection au reseau
 void ConnectToNetwork(){
   int status = WL_IDLE_STATUS;
   WiFi.disconnect();
@@ -96,7 +100,7 @@ void ConnectToNetwork(){
   }
   Serial.println("Connected to wifi");
 }
-
+//appel http du serveur 
 void httpApiCall(float temp, float humidity, float co2, float voc){
   delay(2000);
   if (WiFi.status() == WL_CONNECTED) {
@@ -137,6 +141,7 @@ float getHumidity(){
   return h;
 }
 
+//
 float getTemperature(){
   delay(1000);
   float t = dht.readTemperature();
@@ -172,7 +177,7 @@ float getCo2Level(){
 }
 /**//**//**//**//**//**/
 
-/**///CODE pour MQ-135/**/
+/**///CODE pour MQ-135 voc/**/
 float getVocLevel(){
   delay(1000);
   float vocLevel = analogRead(mq135PinOut);
