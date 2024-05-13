@@ -11,6 +11,9 @@ const { postAvgToDataBase } = require('./database');
 //ne pas oublier
 router.use(express.json());
 const isReadyReset = true;
+
+router.set
+
 //retourne la vue contenant tous les valeurs
 router.get('/data', (req, res) => {
     const filePath = path.join(__dirname, '../public/index.html');
@@ -27,23 +30,17 @@ router.get('/data', (req, res) => {
                 return;
             }
 
-            let jsonData = JSON.parse(data2);
-            let co2 = jsonData["co2"];
-            let humidity = jsonData["humidity"];
-            let temp = jsonData["temp"];
-            let voc = jsonData["voc"];
+            //data actuel
+            let jsonDataRet = JSON.parse(data2);
+            let co2 = jsonDataRet["co2"];
+            let humidity = jsonDataRet["humidity"];
+            let temp = jsonDataRet["temp"];
+            let voc = jsonDataRet["voc"];
 
             //dernier refresh
             let currentDate = new Date();
             let day = "Last refresh: "+currentDate.getFullYear()+"-"+(currentDate.getUTCMonth()+1)+"-"+ currentDate.getDate() +"  "+currentDate.getHours()+":"+currentDate.getMinutes()+":"+currentDate.getSeconds();
-
-            //modifie hmtl
-            let htmlmodifie = data1.replace("<!--date-->",day);
-            //les valeurs de actuelles
-            htmlmodifie = htmlmodifie.replace("<!--hum-->",humidity);
-            htmlmodifie = htmlmodifie.replace("<!--co2-->",co2);
-            htmlmodifie = htmlmodifie.replace("<!--temp-->",temp);
-            htmlmodifie = htmlmodifie.replace("<!--voc-->",voc);
+            jsonDataRet["date"] = day;
 
             const jsonfilePath = path.join(__dirname, './data/averageDataReadings.json');
             fs.readFile(jsonfilePath, 'utf8', (err3, data3) => {
@@ -52,19 +49,20 @@ router.get('/data', (req, res) => {
                     res.status(500).send('Internal Server Error');
                     return;
                 }
-        
-                let jsonData = JSON.parse(data3);
-                let co2 =  jsonData["co2"] ===null ?  0 : jsonData["co2"].toFixed(2);
-                let humidity = jsonData["humidity"] ===null ?  0 : jsonData["humidity"].toFixed(2);
-                let temp =  jsonData["temp"] ===null ?  0 : jsonData["temp"].toFixed(2);
-                let voc = jsonData["voc"] ===null ?  0 : jsonData["voc"].toFixed(2);
+                
+                //les averages   
+                let jsonDataAvg = JSON.parse(data3);
+                let co2Avg =  jsonDataAvg["co2avg"] === null ? jsonDataRet["co2avg"] = 0 : jsonDataRet["co2avg"] = jsonDataAvg["co2"].toFixed(2);
+                let humidityAvg = jsonDataAvg["humidityavg"] === null ?  jsonDataRet["humidityavg"] = 0 : jsonDataRet["humidityavg"] = jsonDataAvg["humidity"].toFixed(2);
+                let tempAvg =  jsonDataAvg["tempavg"] === null ? jsonDataRet["tempavg"] = 0 : jsonDataRet["tempavg"] =  jsonDataAvg["temp"].toFixed(2);
+                let vocAvg = jsonDataAvg["vocavg"] === null ? jsonDataRet["vocavg"] = 0 : jsonDataRet["vocavg"] = jsonDataAvg["voc"].toFixed(2);
 
-                //les averages             
-                htmlmodifie = htmlmodifie.replace("<!--avghum-->",humidity);
-                htmlmodifie = htmlmodifie.replace("<!--avgco2-->",co2);
-                htmlmodifie = htmlmodifie.replace("<!--avgtemp-->",temp);
-                htmlmodifie = htmlmodifie.replace("<!--avgvoc-->",voc);
-                res.send(htmlmodifie);           
+
+               // console.log(jsonDataRet);
+                //console.log(jsonDataAvg);
+
+
+                res.render('index', jsonDataRet );
             });   
         });
 

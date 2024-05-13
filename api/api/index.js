@@ -10,6 +10,12 @@ const arduinoRoutes = require("./arduinoEndPoint");
 //serve le dossier public
 app.use(express.static(path.join(__dirname, '../public')));
 
+
+// Set EJS as the view engine
+app.set('view engine', 'ejs');
+//folder de views
+app.set('views', path.join(__dirname, 'views'));
+
 //les routes
 app.use("/", pagesRoutes);
 app.use("/db", router);
