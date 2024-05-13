@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data</title>
+    <link type="text/css" rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Home controller</h1>
+        <div class="menu-container">
+            <span style="margin-right: 10px;"> <!--date--> </span>
+            <img src="./refreshwhite.svg" alt="img" title="Refresh page" class="refresh" onclick="refresh()"/>
+        </div>
+    <fieldset class="container">
+        <legend>Air quality</legend>
+        <div class="mesure-container">
+            <h3 class="value-title">Humidity</h3>
+            <label for="">Current</label>
+            <div class="value-container"> <!--hum--> </div>
+            <br>
+            <label for="">Average (daily)</label>
+            <div class="value-container"> <!--avghum--> </div>
+            <!--<div class="level-holder"><div class="level"></div></div>-->
+        </div>
+        <div class="mesure-container">
+            <h3 class="value-title">CO₂</h3>
+            <label for="">Current</label>
+            <div class="value-container"> <!--co2--> </div>
+            <br>
+            <label for="">Average (daily)</label>
+            <div class="value-container"> <!--avgco2--> </div>
+        </div>
+        <div class="mesure-container">
+            <h3 class="value-title">VOC</h3>
+            <label for="">Current</label>
+            <div class="value-container"> <!--voc--> </div>
+            <br>
+            <label for="">Average (daily)</label>
+            <div class="value-container"> <!--avgvoc--> </div>
+        </div>
+    </fieldset>
+    <fieldset class="container">
+        <legend>Air temperature</legend>
+        <div class="mesure-container" >
+            <h3 class="value-title">Temperature</h3>
+            <label for="">Current</label>
+            <div class="value-container"> <!--temp--> </div>
+            <br>
+            <label for="">Average (daily)</label>
+            <div class="value-container"> <!--avgtemp--> </div>
+        </div>
+        <div class="mesure-container" style="opacity: 0;"></div>
+    </fieldset>
+    
+    
+</body>
+<script>
+    function refresh(){
+        fetch("http://localhost:3001/data",{method:"GET",mode:"no-cors"}).then(res=>{
+            console.log(res)
+            return res.text();
+        }).then(res=>{
+            console.log(res)
+            document.body.innerHTML = "";
+            document.body.innerHTML = res;
+        }).catch(err=>{
+            console.log(err)
+        });
+    }
+</script>
+</html>
