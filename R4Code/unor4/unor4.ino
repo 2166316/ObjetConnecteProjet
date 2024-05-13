@@ -9,7 +9,7 @@ const char* ssid = "HOME";
 const char* password = "1234567890qwertyuiop";
 
 //variables de l'api
-const char serverAddress[] = "192.168.2.234";  
+const char serverAddress[] = "192.168.2.40";  
 const int port = 3000;
 
 /*DHT11 déclaration varialble const*/
