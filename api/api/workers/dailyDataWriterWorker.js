@@ -38,13 +38,22 @@ fs.readFile(jsonfilePath, 'utf8', (err, data) => {
     }catch(error){
         console.log("erreur lors de l'écriture de dans l'array daily:"+error)
         //corrige l'erreur si data array indisponible
-        fs.appendFile(jsonfilePath,JSON.stringify([], null, 2),(err)=>{
+        const jsonfilePath = path.join(__dirname, "../data", "dailyDataReadings.json");
+        fs.truncate(jsonfilePath,0 ,(err)=>{
             if (err) {
                 console.error('Error reading file:', err);
                 parentPort.postMessage("error");
                 return;
             }
-                parentPort.postMessage("done");
-            });
+            fs.appendFile(jsonfilePath,JSON.stringify([], null, 2),(err)=>{
+                if (err) {
+                    console.error('Error reading file:', err);
+                    parentPort.postMessage("error");
+                    return;
+                }
+                    parentPort.postMessage("done");
+                });
+        });
+        
     }    
 });
