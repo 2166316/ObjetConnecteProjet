@@ -10,9 +10,31 @@ const { postAvgToDataBase } = require('./database');
 
 //ne pas oublier
 router.use(express.json());
-const isReadyReset = true;
 
-router.set
+//le real time worker pour savoir l'heure pas très éfficace mais bon
+const timeWorker = new Worker(path.join(__dirname, "workers", "timeWorker.js"),{});
+
+timeWorker.on('message', (message) => {
+    //console.log('heure actuel:', message);
+    if(message === "00 h 00 min 00 s"){
+        console.log('heure actuel:', message +" insertion db");
+        //insertion  avg
+        postAvgToDataBase();
+        //éffacer tous
+        const worker4 = new Worker(path.join(__dirname, "workers", "deleteDataWorker.js"),{workerData:dataReq}); 
+    }
+});
+
+timeWorker.on('error', (error) => {
+    console.error('Worker heure error:', error);
+});
+
+timeWorker.on('exit', (code) => {
+    if (code !== 0) {
+        console.error(`Worker heure arreté avec code: ${code}`);
+    }
+});
+
 
 //retourne la vue contenant tous les valeurs
 router.get('/data', (req, res) => {
@@ -74,44 +96,16 @@ router.get('/data', (req, res) => {
 //utilisé par le uno r4 pour posté les valeurs sert de main thread
 router.post('/postNewValues', (req, res) => {
     let dataReq = req.body;
-    
-    let currentDate = new Date();
-    let heure  = currentDate.getHours();
 
-    //reset la condition du reset
-    if(heure > 23){
-        isReadyReset = true;
-    }
+    //threads s'execute sans attendre de retour se gère seul
+    //thread pour update data actuel
+    const worker = new Worker(path.join(__dirname, "workers", "actualDataWriterworker.js"),{workerData:dataReq});
+    //thread pour mettre le conserver data actuel dans l'array
+    const worker2 = new Worker(path.join(__dirname, "workers", "dailyDataWriterWorker.js"),{workerData:dataReq});
+    //thread pour le data average
+    const worker3 = new Worker(path.join(__dirname, "workers", "averageDataWriterWorker.js"),{workerData:dataReq});
     
-    if(heure === 0 && isReadyReset){
-        isReadyReset = false;
-        //execute le reset de la journée
-        const worker4 = new Worker(path.join(__dirname, "workers", "deleteDataWorker.js"),{workerData:dataReq});
-        //insertion 
-        postAvgToDataBase();
-    }
-    //
-    else{
-        //threads
-        //thread pour update data actuel
-        const worker = new Worker(path.join(__dirname, "workers", "actualDataWriterworker.js"),{workerData:dataReq});
-        //thread pour mettre le conserver data actuel dans l'array
-        const worker2 = new Worker(path.join(__dirname, "workers", "dailyDataWriterWorker.js"),{workerData:dataReq});
-        //thread pour le data average
-        const worker3 = new Worker(path.join(__dirname, "workers", "averageDataWriterWorker.js"),{workerData:dataReq});
-        //thread pour écrire les données actuel
-        worker.on("message", (data)=>{
-            if (data === "done") {
-                res.sendStatus(200);
-            } else if (data === "error") {
-                res.status(500).send('Internal Server Error');
-            }
-        });
-        worker2.on("error", (error)=>{
-            console.log(error);
-            res.status(500).send('Internal Server Error');
-        }); 
-    }  
+    res.status(200).send('');
 });
 
 module.exports = router;
