@@ -15,13 +15,12 @@ router.use(express.json());
 const timeWorker = new Worker(path.join(__dirname, "workers", "timeWorker.js"),{});
 //call back pour recevoir le data du timeWorker
 timeWorker.on('message', (message) => {
-    //console.log('heure actuel:', message);
     if(message === "00 h 00 min 00 s"){
         console.log('heure actuel:', message +" insertion db");
         //insertion  avg
         postAvgToDataBase();
         //éffacer tous
-        const worker4 = new Worker(path.join(__dirname, "workers", "deleteDataWorker.js"),{workerData:dataReq}); 
+        const worker4 = new Worker(path.join(__dirname, "workers", "deleteDataWorker.js"),{}); 
     }
 });
 timeWorker.on('error', (error) => {

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require("path");
 const { workerData, parentPort} = require("worker_threads");
 const jsonfilePath = path.join(__dirname, "../data", "dailyDataReadings.json");
-const jsonfilePathAvg = path.join(__dirname, "../data", "averageDataWriterWorker.json");
+const jsonfilePathAvg = path.join(__dirname, "../data", "averageDataReadings.json");
 
 //éffacer les daily readings et avg day readings
 fs.truncate(jsonfilePath,0 ,(err)=>{

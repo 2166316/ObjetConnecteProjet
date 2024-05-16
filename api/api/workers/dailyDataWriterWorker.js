@@ -3,7 +3,6 @@ const path = require("path");
 const { workerData, parentPort} = require("worker_threads");
 
 let dataReq = workerData;
-//console.log(workerData);
 const jsonfilePath = path.join(__dirname, "../data", "dailyDataReadings.json");
 
 //thread pour écrire dans l'array des daily readings (dailyDataReadings.json)
@@ -18,7 +17,6 @@ fs.readFile(jsonfilePath, 'utf8', (err, data) => {
         const dataArray = JSON.parse(data);
         dataReq["heure"] = currentDate.getHours()+":"+currentDate.getMinutes()+":"+currentDate.getSeconds();
         dataArray.push(dataReq);
-        // console.log(dataArray);
         const modifiedData = JSON.stringify(dataArray, null, 2);
 
         fs.truncate(jsonfilePath,0 ,(err)=>{

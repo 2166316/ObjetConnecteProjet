@@ -14,7 +14,6 @@ fs.readFile(jsonfilePath, 'utf8', (err, data) => {
             parentPort.postMessage("error");
             return;
         }
-        //console.log("run")
         const dataArray = JSON.parse(data);
         
     
