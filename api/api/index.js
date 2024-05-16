@@ -1,17 +1,18 @@
+//sert au routing page index des vue et des points d'api
 const express = require("express");
 const path = require("path");
 var app = express();
 
 //contient la fonction router et la fonction de database postAvgToDataBase()
 const {router,postAvgToDataBase } = require("./database");
+//routes api
 const pagesRoutes = require("./pages");
-const arduinoRoutes = require("./arduinoEndPoint");
+//const arduinoRoutes = require("./arduinoEndPoint");
 
 //serve le dossier public
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../public'))); 
 
-
-// Set EJS as the view engine
+//set le view engine a ejs
 app.set('view engine', 'ejs');
 //folder de views
 app.set('views', path.join(__dirname, 'views'));

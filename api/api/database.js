@@ -14,6 +14,7 @@ var con = mysql.createPool({
     queueLimit: 0,
 });
 
+//voir tous le data dans le browser
 router.get("/allData",(req,res)=>{
     
     let queryForAll = "select * from Arduino.Data";
@@ -21,13 +22,13 @@ router.get("/allData",(req,res)=>{
         if(err){
             console.log("Erreur bd :"+err);
             res.sendStatus(500);
-            
         }
 
         res.send({values:value});
     });
 });
 
+//insert dans la base de donnée l'avg actuel (déclancher à 0h)
 function postAvgToDataBase(){
     let currentDate = new Date();
     let day = currentDate.getFullYear()+"-"+(currentDate.getUTCMonth()+1)+"-"+ currentDate.getDate() +"  "+currentDate.getHours()+":"+currentDate.getMinutes()+":"+currentDate.getSeconds();
@@ -62,19 +63,4 @@ function postAvgToDataBase(){
     });
 }
 
-//app.post("/insertdata",(req,res)=>{
-
-    /*let queryForAll = "insert";
-    con.query(queryForAll,(err,value)=>{
-        if(err){
-            console.log("Erreur bd :"+err);
-            res.sendStatus(500);
-            
-        }
-
-        res.send({values:value});
-    });*/
-//});
-
-//export le router function et la fonction de insert
 module.exports = {router,postAvgToDataBase };

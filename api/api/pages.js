@@ -13,7 +13,7 @@ router.use(express.json());
 
 //le real time worker pour savoir l'heure pas très éfficace mais bon
 const timeWorker = new Worker(path.join(__dirname, "workers", "timeWorker.js"),{});
-
+//call back pour recevoir le data du timeWorker
 timeWorker.on('message', (message) => {
     //console.log('heure actuel:', message);
     if(message === "00 h 00 min 00 s"){
@@ -24,11 +24,9 @@ timeWorker.on('message', (message) => {
         const worker4 = new Worker(path.join(__dirname, "workers", "deleteDataWorker.js"),{workerData:dataReq}); 
     }
 });
-
 timeWorker.on('error', (error) => {
     console.error('Worker heure error:', error);
 });
-
 timeWorker.on('exit', (code) => {
     if (code !== 0) {
         console.error(`Worker heure arreté avec code: ${code}`);

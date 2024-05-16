@@ -6,6 +6,7 @@ let dataReq = workerData;
 console.log(workerData);
 const jsonfilePath = path.join(__dirname, "../data", "actualDataReading.json");
 
+//thread pour écrire le data actuel (actualDataReading.json)
 fs.readFile(jsonfilePath, 'utf8', (err1, data) => {
     if (err1) {
         console.error('Error reading file:', err1);

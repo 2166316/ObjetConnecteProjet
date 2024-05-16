@@ -6,6 +6,7 @@ let dataReq = workerData;
 //console.log(workerData);
 const jsonfilePath = path.join(__dirname, "../data", "dailyDataReadings.json");
 
+//thread pour écrire dans le average data readings  (dailyDataReadings.json)
 fs.readFile(jsonfilePath, 'utf8', (err, data) => {
     try{
         if (err) {
