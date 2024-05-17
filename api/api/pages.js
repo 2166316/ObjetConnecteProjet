@@ -15,7 +15,7 @@ router.use(express.json());
 const timeWorker = new Worker(path.join(__dirname, "workers", "timeWorker.js"),{});
 //call back pour recevoir le data du timeWorker
 timeWorker.on('message', (message) => {
-    if(message === "23 h 00 min 00 s"){
+    if(message === "17 h 00 min 00 s"){
         console.log('heure actuel:', message +" insertion db");
         //insertion  avg
         postAvgToDataBase();
