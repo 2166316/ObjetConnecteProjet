@@ -39,7 +39,7 @@ fs.readFile(jsonfilePath, 'utf8', (err, data) => {
         });
     }catch(error){
         //sera rerun 
-        console.log("erreur lors de calcule average (va retry automatiquement) :"+error)
+      //  console.log("erreur lors de calcule average (va retry automatiquement) :"+error)
     }    
 });
 

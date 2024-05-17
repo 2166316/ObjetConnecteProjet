@@ -35,7 +35,7 @@ fs.readFile(jsonfilePath, 'utf8', (err, data) => {
                 });
         });
     }catch(error){
-        console.log("erreur lors de l'écriture de dans l'array daily:"+error)
+       // console.log("erreur lors de l'écriture de dans l'array daily:"+error)
         //corrige l'erreur si data array indisponible
         const jsonfilePath = path.join(__dirname, "../data", "dailyDataReadings.json");
         fs.truncate(jsonfilePath,0 ,(err)=>{
