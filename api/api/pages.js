@@ -99,7 +99,7 @@ router.get('/data', (req, res) => {
                             jsonAirExchangerData= JSON.parse(data4);
                             let isActiveAirExchanger = jsonAirExchangerData["activate"] === true ? jsonDataRet["color"] = "#4CAF50" : jsonDataRet["color"] = "#F44336";
                         }catch(err){
-                            const jsonfilePath = path.join(__dirname, "../data/actualActivateAirExchangeBool.json");
+                            const jsonfilePath = path.join(__dirname, "./data/actualActivateAirExchangeBool.json");
                             let parsedData = {activate:false};
                             const modifiedData = JSON.stringify(parsedData, null, 2);
                             fs.writeFile(jsonfilePath, modifiedData, (err3) => {
@@ -108,7 +108,7 @@ router.get('/data', (req, res) => {
                                     return;
                                 }
                             });
-                            return res.statusCode(400);
+                            return res.sendStatus(400);
                         }
                                         
 
@@ -119,7 +119,7 @@ router.get('/data', (req, res) => {
 
         });
     }catch(err){
-        const jsonfilePath = path.join(__dirname, "../data/actualActivateAirExchangeBool.json");
+        const jsonfilePath = path.join(__dirname, "./data/actualActivateAirExchangeBool.json");
         let parsedData = {activate:false};
         const modifiedData = JSON.stringify(parsedData, null, 2);
         fs.writeFile(jsonfilePath, modifiedData, (err3) => {
@@ -128,7 +128,7 @@ router.get('/data', (req, res) => {
                 return;
             }
         });
-        return res.statusCode(400);
+        res.sendStatus(400);
     }
 });
 
@@ -166,7 +166,7 @@ router.get('/getActiveValue', (req, res) => {
             res.status(200).send(modifiedData);
         });
     }catch(err){
-        const jsonfilePath = path.join(__dirname, "../data/actualActivateAirExchangeBool.json");
+        const jsonfilePath = path.join(__dirname, "./data/actualActivateAirExchangeBool.json");
         let parsedData = {activate:false};
         const modifiedData = JSON.stringify(parsedData, null, 2);
         fs.writeFile(jsonfilePath, modifiedData, (err3) => {
