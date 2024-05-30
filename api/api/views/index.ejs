@@ -60,7 +60,7 @@
 </body>
 <script>
     function refresh(){ 
-        fetch("http://192.168.2.48:3000/data",{method:"GET",mode:"no-cors"}).then(res=>{
+        fetch("http://192.168.2.40:3000/data",{method:"GET",mode:"no-cors"}).then(res=>{
             console.log(res)
             return res.text();
         }).then(res=>{
@@ -74,7 +74,7 @@
     }
 
     function activate(){ 
-        fetch("http://192.168.2.48:3000/postActiveValue",{method:"POST",mode:"no-cors"}).then(res=>{
+        fetch("http://192.168.2.40:3000/postActiveValue",{method:"POST",mode:"no-cors"}).then(res=>{
             console.log(res)
             return res.text();
         }).then(res=>{

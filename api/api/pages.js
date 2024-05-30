@@ -132,8 +132,6 @@ router.get('/getActiveValue', (req, res) => {
 });
 //utilisé par le uno r4 pour posté l'activation de l'échangeur d'air
 router.post('/postActiveValue', (req, res) => {
-    
-    const jsonfilePath = path.join(__dirname, "./data/actualActivateAirExchangeBool.json");
 
     //thread pour partir l'échangeur d'air
     const worker =  new Worker(path.join(__dirname, "workers", "actualAirExchangerWriter.js"),{});

@@ -9,8 +9,8 @@ const char* ssid = "HOME";
 const char* password = "1234567890qwertyuiop";
 
 //variables de l'api
-const char serverAddress[] = "192.168.2.234";  
-//const char serverAddress[] = "192.168.2.234"; 
+//const char serverAddress[] = "192.168.2.234";  
+const char serverAddress[] = "192.168.2.40"; 
 const int port = 3000;
 
 /*DHT11 déclaration varialble const*/
@@ -197,74 +197,23 @@ float getTemperature(){
 
 /**///CODE pour Relay/**/
 void setupRelay(){
-Filter your search...
-Type:
-
-All
-
-
-
-
-
-197198199200201202203204205206208209210211212213214216217218219207215220221
-}
-
-void relayControlleur(float co2Level, float vocLevel , float  humidityLevel){
-  delay(1000);
-  if(globalActivateValue){
-    digitalWrite(relayPinOut1, HIGH);
-    
-  }
-  else if (co2Level > co2LevelTrigger || vocLevel > vocLevelTrigger || humidityLevel > humidityLevelTrigger){
-    //on
-
-Message (Enter to send message to 'Arduino UNO R4 WiFi' on 'COM5')
-New Line
-9600 baud
-15:07:27.330 -> Status code: 200
-15:07:27.330 -> Response: 
-15:07:31.607 -> Manuellement activate échangeur d'air :0
-15:07:31.638 -> Status code: 200
-15:07:31.638 -> Response: {"activate":false}
-15:07:33.669 -> ---------------
-15:07:34.692 -> humidity : 44.10
-15:07:35.712 -> temperature : 23.20
-15:07:36.777 -> co2 level : 43.00
-15:07:37.789 -> voc level : 35.00
-15:07:41.297 -> Status code: 200
-15:07:41.297 -> Response: 
-15:07:45.593 -> Manuellement activate échangeur d'air :0
-15:07:45.631 -> Status code: 200
-15:07:45.631 -> Response: {"activate":false}
-15:07:47.665 -> ---------------
-15:07:48.703 -> humidity : 44.00
-15:07:49.732 -> temperature : 23.20
-15:07:50.729 -> co2 level : 43.00
-15:07:51.792 -> voc level : 35.00
-15:07:55.179 -> Status code: 200
-15:07:55.179 -> Response: 
-
   pinMode(relayPinOut1, OUTPUT);
 }
 
+
 void relayControlleur(float co2Level, float vocLevel , float  humidityLevel){
   delay(1000);
   if(globalActivateValue){
     digitalWrite(relayPinOut1, HIGH);
-    
   }
   else if (co2Level > co2LevelTrigger || vocLevel > vocLevelTrigger || humidityLevel > humidityLevelTrigger){
     //on
-    //Serial.println("in");
-    digitalWrite(relayPinOut1, HIGH); 
-    //delay(2000);
-    //digitalWrite(relayPinOut1, LOW); 
-    globalActivateValue = true;
-
-  }else{
+    digitalWrite(relayPinOut1, HIGH);
+    globalActivateValue = true; 
+}else{
     //off
-    digitalWrite(relayPinOut1, LOW); 
-    globalActivateValue = false;
+    digitalWrite(relayPinOut1, LOW);
+    globalActivateValue = false; 
   }
 }
 /**//**//**//**//**//**/
