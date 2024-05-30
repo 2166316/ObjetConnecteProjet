@@ -128,7 +128,7 @@ router.get('/data', (req, res) => {
                 return;
             }
         });
-        res.send(400);
+        return res.statusCode(400);
     }
 });
 
