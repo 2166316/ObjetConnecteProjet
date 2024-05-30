@@ -49,6 +49,12 @@ router.get('/data', (req, res) => {
                 return;
             }
 
+            try{
+                let test = JSON.parse(data2);
+            }catch(err){
+                res.status(500).send('Internal Server Error');
+            }
+
             //data actuel
             let jsonDataRet = JSON.parse(data2);
             let co2 = jsonDataRet["co2"];
