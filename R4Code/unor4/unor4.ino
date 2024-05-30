@@ -9,7 +9,7 @@ const char* ssid = "HOME";
 const char* password = "1234567890qwertyuiop";
 
 //variables de l'api
-const char serverAddress[] = "192.168.2.40";  
+const char serverAddress[] = "192.168.2.234";  
 //const char serverAddress[] = "192.168.2.234"; 
 const int port = 3000;
 
@@ -37,22 +37,28 @@ const int mq9PinOut = A0;
 const int mq135PinOut = A1;
 /*/////////////////////////////////*/
 
+/*Boolean d'activation manuel d'échangeur d'air*/
+bool globalActivateValue;
+/*/////////////////////////////////*/
 
 //des valeurs constantes à voir //
 //nombre pour le voc max 
-const float vocLevelTrigger = 900; //ppb
+const float vocLevelTrigger = 100; 
 //nombre pour le co2 max 
-const float co2LevelTrigger = 700; //ppm
+const float co2LevelTrigger = 100; 
 //nombre pour l'humidité max 
-const float humidityLevelTrigger = 80; 
+const float humidityLevelTrigger = 60; 
 //nombre pour la température max 
-const float tempLevelTrigger = 25;
+//const float tempLevelTrigger = 25;
 
 
 void setup() {
   //baud rate comm du arduino
   Serial.begin(9600);
   Serial.println("-----Start------");
+
+  //false du début
+  globalActivateValue =false;
 
   //lancement dht11
   DHTLaunch();
@@ -81,10 +87,13 @@ void loop() {
   float vocLevel = getVocLevel();
 
   //controlleur de relay numéro 1
-  relayControlleur(co2Level,hLevel);
+  relayControlleur(co2Level , vocLevel , hLevel);
 
-  //appel d'api
+  //appel d'api post les valeurs
   httpApiCall(tLevel, hLevel, co2Level,vocLevel);
+
+  //chercher valeur pour activer l'échangeur d'air
+  httpGetActivateRelay();
   Serial.println("---------------");
 }
 
@@ -101,7 +110,7 @@ void ConnectToNetwork(){
   }
   Serial.println("Connected to wifi");
 }
-//appel http du serveur 
+//appel http du serveur pour post les données
 void httpApiCall(float temp, float humidity, float co2, float voc){
   delay(2000);
   if (WiFi.status() == WL_CONNECTED) {
@@ -125,7 +134,42 @@ void httpApiCall(float temp, float humidity, float co2, float voc){
     Serial.println(response);
     delay(2000);
   }
-   
+}
+
+void httpGetActivateRelay(){
+  delay(2000);
+  if (WiFi.status() == WL_CONNECTED) {
+    WiFiClient wifi;
+    HttpClient client = HttpClient(wifi, serverAddress, port);
+
+    String contentType = "application/json";
+
+    String endpoint = "/getActiveValue";
+
+    client.get(endpoint);
+
+    int statusCode = client.responseStatusCode();
+    String response = client.responseBody();
+    if(statusCode == 200){
+      //Serial.println(String(response));
+      DynamicJsonDocument jsonDoc(1024);
+      DeserializationError error = deserializeJson(jsonDoc, response);
+      bool activateValue = jsonDoc["activate"];
+      if (!error) {
+        bool activateValue = jsonDoc["activate"];
+        globalActivateValue = activateValue;
+        Serial.println("Manuellement activate échangeur d'air :"+String(activateValue));
+      }
+    }
+    client.endRequest();
+    client.stop();
+    
+    Serial.print("Status code: ");
+    Serial.println(statusCode);
+    Serial.print("Response: ");
+    Serial.println(response);
+    delay(2000);
+  }
 }
 /**//**//**//**//**//**/
 
@@ -153,18 +197,74 @@ float getTemperature(){
 
 /**///CODE pour Relay/**/
 void setupRelay(){
+Filter your search...
+Type:
+
+All
+
+
+
+
+
+197198199200201202203204205206208209210211212213214216217218219207215220221
+}
+
+void relayControlleur(float co2Level, float vocLevel , float  humidityLevel){
+  delay(1000);
+  if(globalActivateValue){
+    digitalWrite(relayPinOut1, HIGH);
+    
+  }
+  else if (co2Level > co2LevelTrigger || vocLevel > vocLevelTrigger || humidityLevel > humidityLevelTrigger){
+    //on
+
+Message (Enter to send message to 'Arduino UNO R4 WiFi' on 'COM5')
+New Line
+9600 baud
+15:07:27.330 -> Status code: 200
+15:07:27.330 -> Response: 
+15:07:31.607 -> Manuellement activate échangeur d'air :0
+15:07:31.638 -> Status code: 200
+15:07:31.638 -> Response: {"activate":false}
+15:07:33.669 -> ---------------
+15:07:34.692 -> humidity : 44.10
+15:07:35.712 -> temperature : 23.20
+15:07:36.777 -> co2 level : 43.00
+15:07:37.789 -> voc level : 35.00
+15:07:41.297 -> Status code: 200
+15:07:41.297 -> Response: 
+15:07:45.593 -> Manuellement activate échangeur d'air :0
+15:07:45.631 -> Status code: 200
+15:07:45.631 -> Response: {"activate":false}
+15:07:47.665 -> ---------------
+15:07:48.703 -> humidity : 44.00
+15:07:49.732 -> temperature : 23.20
+15:07:50.729 -> co2 level : 43.00
+15:07:51.792 -> voc level : 35.00
+15:07:55.179 -> Status code: 200
+15:07:55.179 -> Response: 
+
   pinMode(relayPinOut1, OUTPUT);
 }
 
-void relayControlleur(float co2Level, float  humidityLevel){
+void relayControlleur(float co2Level, float vocLevel , float  humidityLevel){
   delay(1000);
-  if(co2Level > co2LevelTrigger || humidityLevel > humidityLevelTrigger){
+  if(globalActivateValue){
+    digitalWrite(relayPinOut1, HIGH);
+    
+  }
+  else if (co2Level > co2LevelTrigger || vocLevel > vocLevelTrigger || humidityLevel > humidityLevelTrigger){
     //on
-     Serial.println("in");
+    //Serial.println("in");
     digitalWrite(relayPinOut1, HIGH); 
+    //delay(2000);
+    //digitalWrite(relayPinOut1, LOW); 
+    globalActivateValue = true;
+
   }else{
     //off
     digitalWrite(relayPinOut1, LOW); 
+    globalActivateValue = false;
   }
 }
 /**//**//**//**//**//**/

@@ -10,6 +10,8 @@
     <div class="header">
         <h1>Home controller</h1>
         <div class="menu-container">
+            <span style="margin-right: 10px;">Activate air exchanger</span>
+            <img src="./broadcast.svg" style="margin-right: 20px;background-color: <%= color %> ;border-radius: 6px;" alt="img" title="Refresh page" class="activate" onclick="activate()"/>
             <span style="margin-right: 10px;"> <%= date %> </span>
             <img src="./refreshwhite.svg" alt="img" title="Refresh page" class="refresh" onclick="refresh()"/>
         </div>
@@ -58,13 +60,28 @@
 </body>
 <script>
     function refresh(){ 
-        fetch("http://192.168.2.40:3000/data",{method:"GET",mode:"no-cors"}).then(res=>{
+        fetch("http://192.168.2.48:3000/data",{method:"GET",mode:"no-cors"}).then(res=>{
             console.log(res)
             return res.text();
         }).then(res=>{
             console.log(res)
             document.body.innerHTML = "";
             document.body.innerHTML = res;
+        }).catch(err=>{
+            console.log(err)
+             
+        }); 
+    }
+
+    function activate(){ 
+        fetch("http://192.168.2.48:3000/postActiveValue",{method:"POST",mode:"no-cors"}).then(res=>{
+            console.log(res)
+            return res.text();
+        }).then(res=>{
+            console.log(res)
+            document.body.innerHTML = "";
+            document.body.innerHTML = res;
+            refresh();
         }).catch(err=>{
             console.log(err)
              

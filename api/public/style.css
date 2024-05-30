@@ -94,6 +94,13 @@ legend{
 
 }
 
+.activate:hover{
+    /*border-bottom: 1px solid black;*/
+    border: 1px solid white;
+    border-radius: 6px; 
+
+}
+
 /*.level-holder{
     border-radius: 50px;
     width: 80%;

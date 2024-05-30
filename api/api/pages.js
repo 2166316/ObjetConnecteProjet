@@ -79,9 +79,18 @@ router.get('/data', (req, res) => {
 
                // console.log(jsonDataRet);
                 //console.log(jsonDataAvg);
+                const jsonfilePath2 = path.join(__dirname, "./data/actualActivateAirExchangeBool.json");
+                fs.readFile(jsonfilePath2, 'utf8', (err4, data4) => {
+                    if (err4) {
+                        console.error('Error reading file:', err4);
+                        res.status(500).send('Internal Server Error');
+                        return;
+                    }
+                    let jsonAirExchangerData= JSON.parse(data4);
+                    let isActiveAirExchanger = jsonAirExchangerData["activate"] === true ? jsonDataRet["color"] = "#4CAF50" : jsonDataRet["color"] = "#F44336";
 
-
-                res.render('index', jsonDataRet );
+                    res.render('index', jsonDataRet );
+                });
             });   
         });
 
@@ -104,5 +113,37 @@ router.post('/postNewValues', (req, res) => {
     
     res.status(200).send('');
 });
+
+//utilisé par le uno r4 pour posté l'activation de l'échangeur d'air
+router.get('/getActiveValue', (req, res) => {
+    
+    const jsonfilePath = path.join(__dirname, "./data/actualActivateAirExchangeBool.json");
+
+    //thread pour écrire le data actuel  (actualDataReading.json)
+    fs.readFile(jsonfilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            return res.status(400);
+        }
+        const modifiedData = JSON.parse(data, null, 2);
+        //console.log(modifiedData); //== "{\n  \"activate\": true\n}"
+        res.status(200).send(modifiedData);
+    });
+});
+//utilisé par le uno r4 pour posté l'activation de l'échangeur d'air
+router.post('/postActiveValue', (req, res) => {
+    
+    const jsonfilePath = path.join(__dirname, "./data/actualActivateAirExchangeBool.json");
+
+    //thread pour partir l'échangeur d'air
+    const worker =  new Worker(path.join(__dirname, "workers", "actualAirExchangerWriter.js"),{});
+    worker.addListener("message",()=>{
+        //console.log("terminé")
+        return res.sendStatus(200);
+
+    });
+    //return res.sendStatus(200);
+});
+
 
 module.exports = router;
