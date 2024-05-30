@@ -96,6 +96,7 @@ router.get('/data', (req, res) => {
                     
                     try{
                         jsonAirExchangerData= JSON.parse(data4);
+                        let isActiveAirExchanger = jsonAirExchangerData["activate"] === true ? jsonDataRet["color"] = "#4CAF50" : jsonDataRet["color"] = "#F44336";
                     }catch(err){
                         res.status(500).send('Internal Server Error');
                         const jsonfilePath = path.join(__dirname, "../data/actualActivateAirExchangeBool.json");
@@ -111,7 +112,7 @@ router.get('/data', (req, res) => {
                         });
                     }
 
-                    let isActiveAirExchanger = jsonAirExchangerData["activate"] === true ? jsonDataRet["color"] = "#4CAF50" : jsonDataRet["color"] = "#F44336";
+                    
 
                     res.render('index', jsonDataRet );
                 });
