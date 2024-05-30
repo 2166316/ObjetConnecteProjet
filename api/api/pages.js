@@ -36,6 +36,9 @@ timeWorker.on('exit', (code) => {
 //retourne la vue contenant tous les valeurs
 router.get('/data', (req, res) => {
     const filePath = path.join(__dirname, '../public/index.html');
+    try{
+
+    
     fs.readFile(filePath,'utf-8', (err1,data1)=>{
         if(err1){
             return;
@@ -92,25 +95,10 @@ router.get('/data', (req, res) => {
                         res.status(500).send('Internal Server Error');
                         return;
                     }
-                    let jsonAirExchangerData= undefined;
                     
-                    try{
-                        jsonAirExchangerData= JSON.parse(data4);
-                        let isActiveAirExchanger = jsonAirExchangerData["activate"] === true ? jsonDataRet["color"] = "#4CAF50" : jsonDataRet["color"] = "#F44336";
-                    }catch(err){
-                        const jsonfilePath = path.join(__dirname, "../data/actualActivateAirExchangeBool.json");
-                        let parsedData = {activate:false};
-                        const modifiedData = JSON.stringify(parsedData, null, 2);
-                        fs.writeFile(jsonfilePath, modifiedData, (err3) => {
-                            if (err3) {
-                                console.error('Error writing file:', err3);
-                                return res.status(500).send('Internal Server Error');
-                            }
-                            return res.status(500).send('Internal Server Error');
-                        });
-                    }
-
-                    
+                    let jsonAirExchangerData= JSON.parse(data4);
+                    let isActiveAirExchanger = jsonAirExchangerData["activate"] === true ? jsonDataRet["color"] = "#4CAF50" : jsonDataRet["color"] = "#F44336";
+                                       
 
                     res.render('index', jsonDataRet );
                 });
@@ -118,7 +106,9 @@ router.get('/data', (req, res) => {
         });
 
     });
-
+    }catch(err){
+        res.send(400);
+    }
 });
 
 
