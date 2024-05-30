@@ -98,17 +98,15 @@ router.get('/data', (req, res) => {
                         jsonAirExchangerData= JSON.parse(data4);
                         let isActiveAirExchanger = jsonAirExchangerData["activate"] === true ? jsonDataRet["color"] = "#4CAF50" : jsonDataRet["color"] = "#F44336";
                     }catch(err){
-                        res.status(500).send('Internal Server Error');
                         const jsonfilePath = path.join(__dirname, "../data/actualActivateAirExchangeBool.json");
                         let parsedData = {activate:false};
                         const modifiedData = JSON.stringify(parsedData, null, 2);
                         fs.writeFile(jsonfilePath, modifiedData, (err3) => {
                             if (err3) {
                                 console.error('Error writing file:', err3);
-                                parentPort.postMessage("error");
-                                return;
+                                return res.status(500).send('Internal Server Error');
                             }
-                            parentPort.postMessage("done");
+                            return res.status(500).send('Internal Server Error');
                         });
                     }
 
