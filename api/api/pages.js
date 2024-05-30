@@ -37,76 +37,83 @@ timeWorker.on('exit', (code) => {
 router.get('/data', (req, res) => {
     const filePath = path.join(__dirname, '../public/index.html');
     try{
-
-    
-    fs.readFile(filePath,'utf-8', (err1,data1)=>{
-        if(err1){
-            return;
-        }
-        
-        const jsonfilePath = path.join(__dirname, './data/actualDataReading.json');
-        fs.readFile(jsonfilePath, 'utf8', (err2, data2) => {
-            if (err2) {
-                console.error('Error reading file:', err2);
-                res.status(500).send('Internal Server Error');
+        fs.readFile(filePath,'utf-8', (err1,data1)=>{
+            if(err1){
                 return;
             }
-
-            try{
-                let test = JSON.parse(data2);
-            }catch(err){
-                res.status(500).send('Internal Server Error');
-            }
-
-            //data actuel
-            let jsonDataRet = JSON.parse(data2);
-            let co2 = jsonDataRet["co2"];
-            let humidity = jsonDataRet["humidity"];
-            let temp = jsonDataRet["temp"];
-            let voc = jsonDataRet["voc"];
-
-            //dernier refresh
-            let currentDate = new Date();
-            let day = "Last refresh: "+currentDate.getFullYear()+"-"+(currentDate.getUTCMonth()+1)+"-"+ currentDate.getDate() +"  "+currentDate.getHours()+":"+currentDate.getMinutes()+":"+currentDate.getSeconds();
-            jsonDataRet["date"] = day;
-
-            const jsonfilePath = path.join(__dirname, './data/averageDataReadings.json');
-            fs.readFile(jsonfilePath, 'utf8', (err3, data3) => {
-                if (err3) {
+            
+            const jsonfilePath = path.join(__dirname, './data/actualDataReading.json');
+            fs.readFile(jsonfilePath, 'utf8', (err2, data2) => {
+                if (err2) {
                     console.error('Error reading file:', err2);
                     res.status(500).send('Internal Server Error');
                     return;
                 }
-                
-                //les averages   
-                let jsonDataAvg = JSON.parse(data3);
-                let co2Avg =  jsonDataAvg["co2avg"] === null ? jsonDataRet["co2avg"] = 0 : jsonDataRet["co2avg"] = jsonDataAvg["co2"].toFixed(2);
-                let humidityAvg = jsonDataAvg["humidityavg"] === null ?  jsonDataRet["humidityavg"] = 0 : jsonDataRet["humidityavg"] = jsonDataAvg["humidity"].toFixed(2);
-                let tempAvg =  jsonDataAvg["tempavg"] === null ? jsonDataRet["tempavg"] = 0 : jsonDataRet["tempavg"] =  jsonDataAvg["temp"].toFixed(2);
-                let vocAvg = jsonDataAvg["vocavg"] === null ? jsonDataRet["vocavg"] = 0 : jsonDataRet["vocavg"] = jsonDataAvg["voc"].toFixed(2);
 
+                try{
+                    let test = JSON.parse(data2);
+                }catch(err){
+                    res.status(500).send('Internal Server Error');
+                }
 
-               // console.log(jsonDataRet);
-                //console.log(jsonDataAvg);
-                const jsonfilePath2 = path.join(__dirname, "./data/actualActivateAirExchangeBool.json");
-                fs.readFile(jsonfilePath2, 'utf8', (err4, data4) => {
-                    if (err4) {
-                        console.error('Error reading file:', err4);
+                //data actuel
+                let jsonDataRet = JSON.parse(data2);
+                let co2 = jsonDataRet["co2"];
+                let humidity = jsonDataRet["humidity"];
+                let temp = jsonDataRet["temp"];
+                let voc = jsonDataRet["voc"];
+
+                //dernier refresh
+                let currentDate = new Date();
+                let day = "Last refresh: "+currentDate.getFullYear()+"-"+(currentDate.getUTCMonth()+1)+"-"+ currentDate.getDate() +"  "+currentDate.getHours()+":"+currentDate.getMinutes()+":"+currentDate.getSeconds();
+                jsonDataRet["date"] = day;
+
+                const jsonfilePath = path.join(__dirname, './data/averageDataReadings.json');
+                fs.readFile(jsonfilePath, 'utf8', (err3, data3) => {
+                    if (err3) {
+                        console.error('Error reading file:', err2);
                         res.status(500).send('Internal Server Error');
                         return;
                     }
                     
-                    let jsonAirExchangerData= JSON.parse(data4);
-                    let isActiveAirExchanger = jsonAirExchangerData["activate"] === true ? jsonDataRet["color"] = "#4CAF50" : jsonDataRet["color"] = "#F44336";
-                                       
+                    //les averages   
+                    let jsonDataAvg = JSON.parse(data3);
+                    let co2Avg =  jsonDataAvg["co2avg"] === null ? jsonDataRet["co2avg"] = 0 : jsonDataRet["co2avg"] = jsonDataAvg["co2"].toFixed(2);
+                    let humidityAvg = jsonDataAvg["humidityavg"] === null ?  jsonDataRet["humidityavg"] = 0 : jsonDataRet["humidityavg"] = jsonDataAvg["humidity"].toFixed(2);
+                    let tempAvg =  jsonDataAvg["tempavg"] === null ? jsonDataRet["tempavg"] = 0 : jsonDataRet["tempavg"] =  jsonDataAvg["temp"].toFixed(2);
+                    let vocAvg = jsonDataAvg["vocavg"] === null ? jsonDataRet["vocavg"] = 0 : jsonDataRet["vocavg"] = jsonDataAvg["voc"].toFixed(2);
 
-                    res.render('index', jsonDataRet );
-                });
-            });   
+
+                // console.log(jsonDataRet);
+                    //console.log(jsonDataAvg);
+                    const jsonfilePath2 = path.join(__dirname, "./data/actualActivateAirExchangeBool.json");
+                    fs.readFile(jsonfilePath2, 'utf8', (err4, data4) => {
+                        if (err4) {
+                            console.error('Error reading file:', err4);
+                            res.status(500).send('Internal Server Error');
+                            return;
+                        }
+                        
+                        let jsonAirExchangerData= JSON.parse(data4);
+                        let isActiveAirExchanger = jsonAirExchangerData["activate"] === true ? jsonDataRet["color"] = "#4CAF50" : jsonDataRet["color"] = "#F44336";
+                                        
+
+                        res.render('index', jsonDataRet );
+                    });
+                });   
+            });
+
         });
-
-    });
     }catch(err){
+        const jsonfilePath = path.join(__dirname, "../data/actualActivateAirExchangeBool.json");
+        let parsedData = {activate:false};
+        const modifiedData = JSON.stringify(parsedData, null, 2);
+        fs.writeFile(jsonfilePath, modifiedData, (err3) => {
+            if (err3) {
+                console.error('Error writing file:', err3);
+                return;
+            }
+        });
         res.send(400);
     }
 });
@@ -132,16 +139,31 @@ router.get('/getActiveValue', (req, res) => {
     
     const jsonfilePath = path.join(__dirname, "./data/actualActivateAirExchangeBool.json");
 
-    //thread pour écrire le data actuel  (actualDataReading.json)
-    fs.readFile(jsonfilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading file:', err);
-            return res.status(400);
-        }
-        const modifiedData = JSON.parse(data, null, 2);
-        //console.log(modifiedData); //== "{\n  \"activate\": true\n}"
-        res.status(200).send(modifiedData);
-    });
+    try{
+
+        //thread pour écrire le data actuel  (actualDataReading.json)
+        fs.readFile(jsonfilePath, 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading file:', err);
+                return res.status(400);
+            }
+            const modifiedData = JSON.parse(data, null, 2);
+            //console.log(modifiedData); //== "{\n  \"activate\": true\n}"
+            res.status(200).send(modifiedData);
+        });
+    }catch(err){
+        const jsonfilePath = path.join(__dirname, "../data/actualActivateAirExchangeBool.json");
+        let parsedData = {activate:false};
+        const modifiedData = JSON.stringify(parsedData, null, 2);
+        fs.writeFile(jsonfilePath, modifiedData, (err3) => {
+            if (err3) {
+                console.error('Error writing file:', err3);
+                return;
+            }
+        });
+        res.status(400);
+    }
+    
 });
 //utilisé par le uno r4 pour posté l'activation de l'échangeur d'air
 router.post('/postActiveValue', (req, res) => {
